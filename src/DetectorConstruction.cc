@@ -70,6 +70,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4Material* aluminium = man->FindOrBuildMaterial("G4_Al");
   G4Material* Si = man->FindOrBuildMaterial("G4_Si");
+  G4Material* Pb = man->FindOrBuildMaterial("G4_Pb");
+  G4Material* Cu = man->FindOrBuildMaterial("G4_Cu");
 
 // Water
 //
@@ -232,6 +234,15 @@ G4double spanningAngle_pmt = 360.*deg;
   siPM_optsurf->SetMaterialPropertiesTable(siPM_MT);
   new G4LogicalSkinSurface("siPM_surf", siPM_log, siPM_optsurf);
 
+  G4Box* absorberPb_box = new G4Box("absorber",50*mm,50*mm, 5*mm);
+  G4LogicalVolume* absorberPb_log = new G4LogicalVolume(absorberPb_box,Pb,"absorber",0,0,0);
+  G4VPhysicalVolume* absorberPb_phys = new G4PVPlacement(0,G4ThreeVector(),absorberPb_log,"absorber",expHall_log,false,0);
+
+  G4Box* absorberCu_box = new G4Box("foil",50*mm,50*mm,1.5*mm);
+  G4LogicalVolume* absorberCu_log = new G4LogicalVolume(absorberCu_box,Cu,"foil",0,0,0);
+  G4VPhysicalVolume* absorberCu_phys = new G4PVPlacement(0,G4ThreeVector(0,0,6.5*mm),absorberCu_log,"absorber",absorberPb_log,false,0);
+
+
 
   // Teflon Wrap Surface
   G4MaterialPropertiesTable* wrapSurface_mpt = new G4MaterialPropertiesTable();
@@ -262,11 +273,8 @@ G4double spanningAngle_pmt = 360.*deg;
 G4int geom = 0;
 
 G4VPhysicalVolume* penTile_phys;
-G4VPhysicalVolume* pmt_phys;
-G4VPhysicalVolume* cath_phys;
 G4RotationMatrix* rot = new G4RotationMatrix();
 G4RotationMatrix* rotm;
-G4VPhysicalVolume* bottle_phys;
 G4VPhysicalVolume* siPM_phys1;
 G4VPhysicalVolume* siPM_phys2;
 G4VPhysicalVolume* wrap_phys;
@@ -278,7 +286,7 @@ G4SubtractionSolid* refBox1;
   1 - Standard tile coupled to SiPM on side.
 
 */
-  switch(geom){
+/*  switch(geom){
 
 //  Tile coupled to SiPM on base
 
@@ -297,75 +305,8 @@ G4SubtractionSolid* refBox1;
     siPM_phys1 = new G4PVPlacement(0,G4ThreeVector(0,0,17.75*mm),siPM_log,"detector",expHall_log,false,0);
     break;
 
-}
-// ------------- Surfaces --------------
-//
-// Water Tank
-//
-/*
-  G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
-  opWaterSurface->SetType(dielectric_dielectric);
-  opWaterSurface->SetFinish(ground);
-  opWaterSurface->SetModel(unified);
+}*/
 
-  new G4LogicalBorderSurface("WaterSurface",
-                                 waterTank_phys,expHall_phys,opWaterSurface);
-*/
-// Air Bubble
-//
-/*
-  G4OpticalSurface* opAirSurface = new G4OpticalSurface("AirSurface");
-  opAirSurface->SetType(dielectric_dielectric);
-  opAirSurface->SetFinish(polished);
-  opAirSurface->SetModel(glisur);
-
-  G4LogicalSkinSurface* airSurface =
-          new G4LogicalSkinSurface("AirSurface", bubbleAir_log, opAirSurface);
-
-  G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
-        (airSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());
-
-  if (opticalSurface) opticalSurface->DumpInfo();
-
-//
-// Generate & Add Material Properties Table attached to the optical surfaces
-//
-  const G4int num = 2;
-  G4double ephoton[num] = {2.034*eV, 4.136*eV};
-
-  //OpticalWaterSurface
-  G4double refractiveIndex[num] = {1.35, 1.40};
-  G4double specularLobe[num]    = {0.3, 0.3};
-  G4double specularSpike[num]   = {0.2, 0.2};
-  G4double backScatter[num]     = {0.2, 0.2};
-
-  G4MaterialPropertiesTable* myST1 = new G4MaterialPropertiesTable();
-
-  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
-  myST1->AddProperty("SPECULARLOBECONSTANT",  ephoton, specularLobe,    num);
-  myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
-  myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
-
-  G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
-  myST1->DumpTable();
-
-//  opWaterSurface->SetMaterialPropertiesTable(myST1);
-
-  //OpticalAirSurface
-  G4double reflectivity[num] = {0.3, 0.5};
-  G4double efficiency[num]   = {0.8, 1.0};
-
-  G4MaterialPropertiesTable *myST2 = new G4MaterialPropertiesTable();
-
-  myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
-  myST2->AddProperty("EFFICIENCY",   ephoton, efficiency,   num);
-
-  G4cout << "Air Surface G4MaterialPropertiesTable" << G4endl;
-  myST2->DumpTable();
-
-  opAirSurface->SetMaterialPropertiesTable(myST2);
-*/
-//always return the physical World
   return expHall_phys;
 }
 

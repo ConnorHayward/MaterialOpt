@@ -1,18 +1,11 @@
 #/control/verbose 2
-#/tracking/verbose 1
+#/tracking/verbose 3
+
 #
 #/gun/particle opticalphoton
 #/gun/energy 3 eV
 #
 #/gun/direction 5 -3 0
 #/OpNovice/gun/optPhotonPolar
-
-# Particle Types
-# 	0 - perpendicular mono-energetic electrons with fixed position
-#  1 - 207Bi source
-# 	2 - 90Sr source with isotropic continuous electron spectrum
-#  3 - cosmic muons, perpendicular, homogeneously distributed
-
-# /PEN/gun/sourceType 1
-/run/beamOn 10000
+/run/beamOn 100
 #

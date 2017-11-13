@@ -11,6 +11,12 @@ Light Yield - number of photons produced in an event.
 Ratio of Light Output to Light Yield.
 Number of photons leaving the target. Geometry independent version of light output.
 
+To use: Navigate to build folder and enter:
+
+cmake -DGeant4_DIR=/opt/geant4/lib64/Geant4-10.3.0 ..
+
+This creates the makefile as needed. Then, run make to create the simulation. ./PEN runs the program.
+
 Additional macro commands and cases:
 
 /PEN/det/setTargetMat [material]

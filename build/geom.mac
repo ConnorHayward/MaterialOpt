@@ -1,0 +1,132 @@
+#/control/verbose 2
+#/tracking/verbose 3
+#/PEN/gun/sourceType options:
+# 0 - perpendicular mono-energetic electrons with fixed position - use with /PEN/gun/sourceEnergy
+# 1 - 60Co source
+# 2 - 137Cs source
+#	3 - 90Sr source
+#	4 - 241Am source
+#	5 - 106Ru source
+
+/PEN/det/setTargetMat PEN
+/PEN/det/setWorldMat air
+
+/PEN/det/setSize 10 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000
+
+/PEN/det/setSize 3 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000
+
+/PEN/det/setSize 1 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000
+
+/PEN/det/setSize 5 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000
+
+/PEN/det/setSize 15 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000
+
+/PEN/det/setSize 12 mm
+
+/PEN/gun/sourceEnergy 60 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 250 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 100 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 500 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 1000 keV
+/run/beamOn 100000
+
+/PEN/gun/sourceEnergy 2000 keV
+/run/beamOn 100000

@@ -1,0 +1,9 @@
+#/control/verbose 2
+#/tracking/verbose 3
+
+/PEN/det/setTargetMat PEN
+
+/PEN/det/setSize 1 cm
+
+/PEN/gun/sourceEnergy 200 keV
+/run/beamOn 1000

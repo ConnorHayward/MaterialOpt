@@ -36,6 +36,13 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "DetectorMessenger.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4MaterialPropertiesTable.hh"
+class DetectorMessenger;
+class G4LogicalVolume;
+class G4Material;
+class G4Box;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,19 +54,52 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    void SetSize  (G4double);
+    void SetTargetMaterial(G4String);
+    void SetWorldMaterial(G4String);
+    void SetPMTPlacement(G4ThreeVector);
+    void UpdateGeometry(void);
+    void SetPropertyTable(G4Material* mat, G4MaterialPropertiesTable* tab);
+    void SetDetectorType(G4int);
+    G4int GetDetectorType(){return fDetectorType;};
+
+
+  public:
+    const G4VPhysicalVolume* GetWorld() {return fPBox;};
+
+    G4double GetSize()  {return fThickness;};
+    G4double GetTargetSize()  {return fTargetThickness;};
+    G4String GetTargetMaterialName(){return fTargetName;};
+    G4Material*        GetWorldMaterial()   {return fWorldMaterial;};
+    G4Material*        GetTargetMaterial()   {return fTargetMaterial;};
+
+    void               DefineMaterials();
 
   private:
     G4double fExpHall_x;
     G4double fExpHall_y;
     G4double fExpHall_z;
 
-    G4double fTank_x;
-    G4double fTank_y;
-    G4double fTank_z;
+    G4double fThickness;
+    G4double fTargetThickness;
+    G4MaterialPropertiesTable* fTargetMPT;
+    G4MaterialPropertiesTable* fWorldMPT;
 
-    G4double fBubble_x;
-    G4double fBubble_y;
-    G4double fBubble_z;
+    G4Material* fWorldMaterial;
+    G4Material* fTargetMaterial;
+    G4String fTargetName;
+    G4VPhysicalVolume* fPBox;
+    G4LogicalVolume* fLBox;
+    G4Box* fBox;
+
+    G4VPhysicalVolume* fWPBox;
+    G4LogicalVolume* fWLBox;
+    G4Box* fWorldBox;
+    G4ThreeVector fPMTPlacement = G4ThreeVector(0,0,63.5*mm+fTargetThickness);
+
+    G4int fDetectorType;
+
+    DetectorMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

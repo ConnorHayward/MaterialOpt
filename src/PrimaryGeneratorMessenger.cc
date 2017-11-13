@@ -5,14 +5,14 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4SystemOfUnits.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::
-  PrimaryGeneratorMessenger(PrimaryGeneratorAction* PENGun)
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
   : G4UImessenger(),
-    fPENAction(PENGun)
+    fAction(Gun),fGunDir(0)
 {
+
   fGunDir = new G4UIdirectory("/PEN/gun/");
   fGunDir->SetGuidance("PrimaryGenerator control");
 
@@ -20,6 +20,12 @@ PrimaryGeneratorMessenger::
   fSourceType->SetGuidance("Choose the type of source");
   fSourceType->SetParameterName("sourceType",true);
   fSourceType->SetDefaultValue(0);
+  fSourceType->AvailableForStates(G4State_Idle);
+
+  fSourceEnergy = new G4UIcmdWithADoubleAndUnit("/PEN/gun/sourceEnergy", this);
+  fSourceEnergy->SetGuidance("Choose source energy");
+  fSourceEnergy->SetParameterName("sourceEnergy",true);
+  fSourceEnergy->SetDefaultValue(60*keV);
   fSourceType->AvailableForStates(G4State_Idle);
 }
 
@@ -37,7 +43,12 @@ void PrimaryGeneratorMessenger::SetNewValue(
                                         G4UIcommand* command, G4String newValue)
 {
   if( command == fSourceType ) {
-      fPENAction->SetSourceType(fSourceType->GetNewIntValue(newValue));
+      fAction->SetSourceType(fSourceType->GetNewIntValue(newValue));
+  }
+
+  if (command == fSourceEnergy){
+    fAction->SetSourceType(0);
+    fAction->SetSourceEnergy(fSourceEnergy->GetNewDoubleValue(newValue));
   }
 }
 

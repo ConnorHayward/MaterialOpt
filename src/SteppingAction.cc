@@ -34,23 +34,32 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
 
 	G4Track* theTrack = theStep->GetTrack();
 
-	if ( theTrack->GetCurrentStepNumber() == 1 ) fExpectedNextStatus = Undefined;
+	if ( theTrack->GetCurrentStepNumber() == 1 && theTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition() ) {
+		fEventAction->AddProducedPhoton();
+	}
+	fExpectedNextStatus = Undefined;
 
 	G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
 	G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
 
-	if ( thePrePV->GetName()=="scintillator"){
+	if ( thePrePV->GetName()=="target"){
+
 		fEventAction->AddDepositedEnergy(theStep->GetTotalEnergyDeposit()/MeV);
+	}
+	if (thePrePV->GetName()=="absorber"){
+		fEventAction->AddDepositedEnergyA(theStep->GetTotalEnergyDeposit()/MeV);
 	}
 
 	G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 	G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
+	 if (thePrePV->GetName()=="target"&&theTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){
+		 if(thePostPV->GetName() != "target"){
+			 fEventAction->AddEscapedPhoton();
+		 }
+	 }
 
 	G4OpBoundaryProcessStatus boundaryStatus=Undefined;
 	static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
-
-	if (theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition() && theTrack->GetCurrentStepNumber() == 1)
-		fEventAction->AddIWavelength(G4double(1240/(theTrack->GetVertexKineticEnergy()/eV)));
 
 	//G4OpBoundaryProcessStatus boundaryStatus2 = Absorption;
 	//G4cout << boundaryStatus2.name() << G4endl;
@@ -99,13 +108,12 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
 	  		fExpectedNextStatus=Undefined;
 	  		switch(boundaryStatus){
 		  		case Absorption:
-		  			fEventAction->AddBAWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
+
 
 		  			break;
 		      	case Detection:
 		      	{
-		        	fEventAction->AddWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
-		      		fEventAction->AddDetectedPhoton();
+							fEventAction->AddDetectedPhoton();
 			      	break;
 		      	}
 		      	case FresnelReflection:

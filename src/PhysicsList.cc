@@ -35,7 +35,7 @@
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
 
-G4ThreadLocal G4int PhysicsList::fVerboseLevel = 1;
+G4ThreadLocal G4int PhysicsList::fVerboseLevel = 0;
 G4ThreadLocal G4int PhysicsList::fMaxNumPhotonStep = 20;
 G4ThreadLocal G4Cerenkov* PhysicsList::fCerenkovProcess = 0;
 G4ThreadLocal G4Scintillation* PhysicsList::fScintillationProcess = 0;

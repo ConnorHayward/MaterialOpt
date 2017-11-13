@@ -79,11 +79,12 @@ int main(int argc,char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  runManager->SetUserInitialization(new DetectorConstruction());
+  DetectorConstruction* det = new DetectorConstruction;
+  runManager->SetUserInitialization(det);
   // Physics list
   runManager-> SetUserInitialization(new PhysicsList());
   // User action initialization
-  runManager->SetUserInitialization(new ActionInitialization());
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
   // Initialize G4 kernel
   //

@@ -2,7 +2,7 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "Randomize.hh"
-
+#include "DetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -13,23 +13,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
 : G4VUserPrimaryGeneratorAction(),
-fParticleGun(0)
+fParticleGun(0),
+fDetector(det)
 {
 	G4int n_particle = 1;
+	fPrimaryMessenger = new PrimaryGeneratorMessenger(this);
 	fParticleGun = new G4ParticleGun(n_particle);
 
-	//create a messenger for this class
-  	fGunMessenger = new PrimaryGeneratorMessenger(this);
-
- 	 //default kinematic
- 	 //
+ 	//default kinematic
+ 	//
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
-
-	fSourceType = 3;
+	fSourceType = 0;
+	fSourceEnergy = 60*keV;
 	fPhotonWavelength = 0;
+	fParticleName = "void";
+	DefineParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,85 +38,104 @@ fParticleGun(0)
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
 	delete fParticleGun;
-	delete fGunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void PrimaryGeneratorAction::DefineParticle(){
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
 	// Particle Types
 	// 	0 - perpendicular mono-energetic electrons with fixed position
-	//  1 - 207Bi source
-	// 	2 - 90Sr source with isotropic continuous electron spectrum
-	//  3 - cosmic muons, perpendicular, homogeneously distributed
-	//  4 - monochromatic light
-	//	5 - UV LED source
-	// 	6 - Xe lamp
+	//  1 - 60Co source
+	// 	2 - 137Cs source
+	//	3 - 90Sr source
+	//	4 - 241Am source
+	//	5 - 106Ru source
 
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 
     G4double ionCharge   = 0.*eplus;
     G4double excitEnergy = 0.*keV;
-
-
+		G4int Z=0, A=0;
+		G4ParticleDefinition* ion;
+		double position = 1*cm+(fDetector->GetTargetSize())/2;
 	switch (fSourceType) {
 		case 0:
-			fParticleGun->SetParticleDefinition(particleTable->FindParticle("e-"));
-			fParticleGun->SetParticleEnergy(3*MeV);
-			fParticleGun->SetParticlePosition(G4ThreeVector(1*cm,0*cm,0*cm));
-			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(-1.,0.,0));
+			fParticleGun->SetParticleDefinition(particleTable->FindParticle("gamma"));
+			fParticleGun->SetParticleEnergy(fSourceEnergy);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0*cm,0*cm,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(2*(rand()-1),2*(rand()-1),2*(rand()-1)));
 			break;
 		case 1:
+			Z = 27;
+			A = 60;
+			ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
 			fParticleGun->SetParticleEnergy(0*eV);
-			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1.0*cm));
-		//	fParticleGun->SetParticlePosition(G4ThreeVector(30*cm,0.,0));
-			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(83,207,excitEnergy));
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1));
+			fParticleGun->SetParticleDefinition(ion);
 			fParticleGun->SetParticleCharge(ionCharge);
 			break;
 		case 2:
+			Z = 55;
+			A = 137;
+			ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
 			fParticleGun->SetParticleEnergy(0*eV);
-			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1.0*cm));
-			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(38,90,excitEnergy));
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1));
+			fParticleGun->SetParticleDefinition(ion);
 			fParticleGun->SetParticleCharge(ionCharge);
 			break;
 		case 3:
-			fParticleGun->SetParticleDefinition(particleTable->FindParticle("mu-"));
+			Z=38;
+			A=90;
+			ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+			fParticleGun->SetParticleEnergy(0*eV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1));
+			fParticleGun->SetParticleDefinition(ion);
+			fParticleGun->SetParticleCharge(ionCharge);
 			break;
 		case 4:
-			if (fPhotonWavelength == 0)
-			{
-				G4cerr << "Default value (420 nm) of primary photons was set!" << G4endl;
-				fPhotonWavelength = 420;
-			}
-			fParticleGun->SetParticleDefinition(particleTable->FindParticle("opticalphoton"));
-			fParticleGun->SetParticleEnergy(1.24/(fPhotonWavelength/1000));
+			Z=95;
+			A=241;
+			ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+			fParticleGun->SetParticleEnergy(0*eV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1));
+			fParticleGun->SetParticleDefinition(ion);
+			fParticleGun->SetParticleCharge(ionCharge);
 			break;
 		case 5:
-			fParticleGun->SetParticleDefinition(particleTable->FindParticle("opticalphoton"));
+			Z=44;
+			A=106;
+			ion = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+			fParticleGun->SetParticleEnergy(0*eV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-position));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1));
+			fParticleGun->SetParticleDefinition(ion);
+			fParticleGun->SetParticleCharge(ionCharge);
 			break;
-		case 6:
-			fParticleGun->SetParticleDefinition(particleTable->FindParticle("opticalphoton"));
-			break;
-		default:
-			break;
-	}
+		}
+	SetParticleName(Z,A,excitEnergy);
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-	// fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,0.0*cm));
-	// fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-	// fParticleGun->SetParticleEnergy(500.0*keV);
-
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{	if(fSourceType==0){
+	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(2*(rand()-1),2*(rand()-1),2*(rand()-1)));
+}
 	fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void PrimaryGeneratorAction::SetParticleName(G4int Z, G4int A, G4double excitEnergy)
+{
+	fParticleName = G4IonTable::GetIonTable()->GetIonName(Z,A,excitEnergy);
+}
+
 void PrimaryGeneratorAction::SetSourceType(G4int newType)
 {
-	if (newType < 6 && newType > 0)
+	if (newType < 6 && newType >= 0)
 	{
 		fSourceType = newType;
 	}
@@ -124,6 +144,20 @@ void PrimaryGeneratorAction::SetSourceType(G4int newType)
 		G4cerr << "The option is out of the possible values (0-5)!" << G4endl;
 		G4cerr << "The default option (0) is set!" << G4endl;
 		fSourceType = 0;
+	}
+	DefineParticle();
+}
+
+void PrimaryGeneratorAction::SetSourceEnergy(G4double newEnergy)
+{
+	if (newEnergy>0)
+	{
+		fSourceEnergy = newEnergy;
+	}
+	else{
+		G4cerr << "New energy is < 0." << G4endl;
+		G4cerr << "The default option 60 keV is set!" << G4endl;
+		fSourceEnergy = 60*keV;
 	}
 }
 

@@ -20,10 +20,11 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-    PrimaryGeneratorAction* 		fPENAction;
+    PrimaryGeneratorAction* 		fAction;
     G4UIdirectory*                  fGunDir;
     //G4UIcmdWithADoubleAndUnit*      fPolarCmd;
     G4UIcmdWithAnInteger*			fSourceType;
+    G4UIcmdWithADoubleAndUnit* fSourceEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

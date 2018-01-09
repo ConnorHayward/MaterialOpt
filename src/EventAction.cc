@@ -36,6 +36,11 @@ void EventAction::BeginOfEventAction(const G4Event* myEvent)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void EventAction::AddWavelength(G4double wavelength){
+	auto analysisManager = G4AnalysisManager::Instance();
+
+	analysisManager->FillH1(6, wavelength);
+}
 
 void EventAction::EndOfEventAction(const G4Event* myEvent)
 {

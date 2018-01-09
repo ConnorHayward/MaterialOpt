@@ -64,6 +64,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4int GetDetectorType(){return fDetectorType;};
 
 
+
+
   public:
     const G4VPhysicalVolume* GetWorld() {return fPBox;};
 
@@ -96,6 +98,18 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fWLBox;
     G4Box* fWorldBox;
     G4ThreeVector fPMTPlacement = G4ThreeVector(0,0,63.5*mm+fTargetThickness);
+
+    G4Material* fPEN;
+    G4Material* fLAr;
+    G4Material* fAluminium;
+    G4Material* fSi;
+    G4Material* fPb;
+    G4Material* fCu;
+    G4Material* fGlass;
+    G4Material* fTeflon;
+    G4Material* fAir;
+    G4Material* fVacuum;
+    G4Material* fGe;
 
     G4int fDetectorType;
 

@@ -41,7 +41,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
   fTypeCMD = new G4UIcmdWithAnInteger("/PEN/det/setDetectorType",this);
   fTypeCMD->SetGuidance("Set detector type");
-  fTypeCMD->SetRange("Type 0-1");
   fTypeCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
   fTypeCMD->SetToBeBroadcasted(false);
 

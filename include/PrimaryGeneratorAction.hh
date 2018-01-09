@@ -33,8 +33,10 @@ public:
 	void SetPhotonWavelength(G4double newValue);
 	G4String GetParticleName(void){return fParticleName;};
 	void SetParticleName(G4int Z, G4int A, G4double excitEnergy);
-
+	G4double GetPosition(void){return fPosition;};
+	void SetPosition(G4double newValue);
 private:
+	G4double fPosition;
 	G4String fParticleName;
 	PrimaryGeneratorMessenger* fPrimaryMessenger;
 	G4ParticleGun*  fParticleGun;

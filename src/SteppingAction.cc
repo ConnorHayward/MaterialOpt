@@ -113,6 +113,7 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
 		  			break;
 		      	case Detection:
 		      	{
+							fEventAction->AddWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
 							fEventAction->AddDetectedPhoton();
 			      	break;
 		      	}

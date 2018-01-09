@@ -17,6 +17,12 @@
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
+
+/PEN/det/setTargetMat PEN
+/PEN/det/setWorldMat air
+/PEN/gun/sourceType 0
+/PEN/det/setSize 1.5 mm
+/PEN/det/setDetectorType 0
 #
 # Draw geometry:
 /vis/drawVolume
@@ -54,8 +60,8 @@
 #
 # Many other options are available with /vis/modeling and /vis/filtering.
 # For example, to select colour by particle ID:
-#/vis/modeling/trajectories/create/drawByParticleID
-#/vis/modeling/trajectories/drawByParticleID-0/set gamma blue
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set gamma blue
 #
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate

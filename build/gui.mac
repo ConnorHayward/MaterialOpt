@@ -15,6 +15,7 @@
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run "beamOn 20" "/run/beamOn 20"
+/gui/addButton run "beamOn 100" "/run/beamOn 100"
 #/gui/addButton run run1 "/control/execute run1.mac"
 #/gui/addButton run run2 "/control/execute run2.mac"
 #

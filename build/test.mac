@@ -3,7 +3,7 @@
 
 /PEN/det/setTargetMat PEN
 
-/PEN/det/setSize 1 cm
+/PEN/det/setSize 1.35 mm
 
 /PEN/gun/sourceEnergy 200 keV
 /run/beamOn 1000
